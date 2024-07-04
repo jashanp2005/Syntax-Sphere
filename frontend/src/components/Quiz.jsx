@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { saveResult } from "../redux/rootSlice";
+import { getWordsSuccess, saveResult } from "../redux/rootSlice";
 
 function RadioGroup() {
   const navigate = useNavigate();
@@ -46,6 +46,8 @@ function RadioGroup() {
     options: ['lazy', 'hardworking', 'energetic', 'active']
   }];
 
+  dispatch(getWordsSuccess(words));
+
   const handleChange = () => {
     if (ans === '') {
       toast.error('Please select an option');
@@ -59,7 +61,7 @@ function RadioGroup() {
   useEffect(() => {
     if (count === 8){
       console.log(result);
-      dispatch(saveResult());
+      dispatch(saveResult(result));
       navigate('/result');
     }
   }, [count, result]);
