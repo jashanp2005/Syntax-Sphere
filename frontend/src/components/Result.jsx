@@ -1,9 +1,11 @@
 import React from 'react'
 
 const Result = () => {
+  let correctAns;
+  let percentage;
   return (
     <div>
-      This is your result, you are fail, start studying
+      
     </div>
   )
 }
