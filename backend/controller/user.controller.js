@@ -33,22 +33,33 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const {email, password} = req.body;
-    const user = await User.findOne({email});
-    if(!user){
-        return res.status(400).json({message: 'User does not exist'});
-    }
-    const verification = await bcryptjs.compare(password, user.password);
-    if(verification){
-        return res.status(200).json({
-            message: 'Login Successfull',
-            user: {
-                _id: user._id,
-                fullname: user.fullname,
-                email: user.email
-            }
-        })
-    }
-    else return res.status(400).json({message: 'hacker hai bhai hacker'});
+        const validUser = await User.findOne({email});
+        if(!validUser){
+            return res.status(400).json({message: 'User does not exist'});
+        }
+        const validPassword = bcryptjs.compareSync(password, validUser.password);
+
+        if(!validPassword){
+            return next(errorHandler(400, 'Invalid password'))
+        }
+        const token = jwt.sign({id: validUser._id, isAdmin: validUser.isAdmin}, process.env.JWT_SECRET);
+    
+        const {password: pass, ...rest} = validUser._doc;
+
+        if(verification){
+            return res.status(200).cookie('access_token', token, {
+                httpOnly: true
+            }).
+            json({
+                message: 'Login Successfull',
+                user: {
+                    _id: validUser._id,
+                    fullname: validUser.fullname,
+                    email: validUser.email
+                }
+            })
+        }
+        else return res.status(400).json({message: 'hacker hai bhai hacker'});
     } 
     catch (error) {
         console.log("Error: " + error.message);
