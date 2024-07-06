@@ -1,6 +1,6 @@
 import Book from "../model/book.model.js";
 import User from "../model/user.model.js";
-import errorHandler from '../utils/error.js'
+import {errorHandler} from '../utils/error.js'
 
 export const getBook = async (req, res) => {
     try {

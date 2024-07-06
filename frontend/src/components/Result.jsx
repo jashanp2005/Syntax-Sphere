@@ -24,13 +24,17 @@ const Result = () => {
     );
 
     setCorrectAns(correctAnswers);
-    setPercentage((correctAnswers / words.length) * 100);
-    if(percentage < 50){
-      toast.error('OOPS, You are fail')
-    }
-    else{
-      toast.success('You have passed')
-    }
+    const newPercentage = (correctAnswers / words.length) * 100;
+    setPercentage(newPercentage);
+
+    // Delay the toast messages to ensure the state is updated
+    setTimeout(() => {
+      if (newPercentage < 50) {
+        toast.error('OOPS, You are fail');
+      } else {
+        toast.success('You have passed');
+      }
+    }, 100);
   }, [result, words]);
 
   const resetHandler = () => {
