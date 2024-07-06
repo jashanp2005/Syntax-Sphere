@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAuth } from './context/AuthProvider';
 import Quiz from './components/Quiz';
 import { Navigate, Route, Routes } from 'react-router-dom'
+import Learning from './components/Learning';
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path='/quiz' element={<Quiz/>}/>
         <Route path='/result' element={<Result/>}/>
+        <Route path='/learning' element={<Learning/>}></Route>
       </Routes>
       <Toaster />
     </div>
