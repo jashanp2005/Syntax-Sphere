@@ -13,6 +13,9 @@ const Result = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Filter questions outside of useEffect
+  const questions = words.filter((item) => item.word);
+
   useEffect(() => {
     const countMatchingElements = (arr1, arr2) => {
       return arr1.filter((item, index) => item === arr2[index]).length;
@@ -50,12 +53,22 @@ const Result = () => {
         <p className="text-xl text-center mb-4">
           {percentage >= 50 ? 'Pass' : 'Fail'}
         </p>
-        <div className="flex justify-around mb-6">
+        <div className="flex justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Questions</h2>
+            <ul className="space-y-2">
+              {questions.map((question, index) => (
+                <li key={index} className="bg-gray-700 p-2 rounded">
+                  {index + 1} - What is the meaning of {question.word}?
+                </li>
+              ))}
+            </ul>
+          </div>
           <div>
             <h2 className="text-2xl font-semibold mb-4">Your Answers</h2>
             <ul className="space-y-2">
               {result.map((answer, index) => (
-                <li key={index} className="bg-gray-700 p-2 rounded">
+                <li key={index} className={`bg-gray-700 p-2 rounded ${answer === words[index].meaning ? 'text-green-500' : 'text-red-500'}`}>
                   {index + 1} - {answer}
                 </li>
               ))}
