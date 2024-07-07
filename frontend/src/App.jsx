@@ -23,7 +23,7 @@ const App = () => {
           element={authUser ? <Courses /> : <Navigate to="/signup" />}
         />
         <Route path="/signup" element={<Signup />} />
-        <Route path='/quiz' element={<Quiz/>}/>
+        <Route path="/quiz/:language" element={<Quiz />}/>
         <Route path='/result' element={<Result/>}/>
         <Route path='/learning' element={<Learning/>}></Route>
       </Routes>

@@ -18,7 +18,7 @@ const Course = () => {
             }
         }
         getBook();
-    }, [])
+    }, []);
 
     return (
         <>

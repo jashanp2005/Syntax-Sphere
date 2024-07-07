@@ -1,52 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { getWordsSuccess, saveResult } from "../redux/rootSlice";
+import { getWordsSuccess, saveResult, getWordsFail, getWordsRequest, clearState } from "../redux/rootSlice";
+import { translateWords } from '../utils/features';
 
 function RadioGroup() {
   const navigate = useNavigate();
   const [result, setResult] = useState([]);
   const [count, setCount] = useState(0);
   const [ans, setAns] = useState('');
+  const [loading, setLoading] = useState(true); // To handle loading state for words
 
   const dispatch = useDispatch();
+  const { language } = useParams();
 
-  const words = [{
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }, {
-    word: 'indolent',
-    meaning: 'lazy',
-    options: ['lazy', 'hardworking', 'energetic', 'active']
-  }];
+  useEffect(() => {
+    dispatch(getWordsRequest());
+    translateWords(language || "hi")
+      .then((arr) => {
+        dispatch(getWordsSuccess(arr));
+        setLoading(false); // Set loading to false when words are fetched
+      })
+      .catch((err) => dispatch(getWordsFail(err)));
+  }, [dispatch, language]);
 
-  dispatch(getWordsSuccess(words));
+  const { words, error } = useSelector((state) => state.root);
+
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      alert(error);
+      dispatch(clearState());
+    }
+  }, [error, dispatch]);
 
   const handleChange = () => {
     if (ans === '') {
@@ -59,14 +46,22 @@ function RadioGroup() {
   };
 
   useEffect(() => {
-    if (count === 8){
+    let timeoutId;
+    if (words && count === words.length) {
       console.log(result);
       dispatch(saveResult(result));
-      navigate('/result');
+      timeoutId = setTimeout(() => {
+        navigate('/result');
+      }, 2000); // Wait for 2 seconds before navigating
     }
-  }, [count, result]);
+    return () => clearTimeout(timeoutId); // Cleanup the timeout on component unmount or update
+  }, [count, result, words, dispatch, navigate]);
 
-  if(count < 8){
+  if (loading) {
+    return <div>Loading...</div>; // Display loading state while words are being fetched
+  }
+
+  if (count < words.length) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-900">
         <div className="bg-gray-800 shadow-lg rounded-lg p-8 max-w-md w-full">
@@ -99,7 +94,9 @@ function RadioGroup() {
         </div>
       </div>
     );
-  }  
+  } else {
+    return <div>Loading...</div>;
+  }
 }
 
 export default RadioGroup;
