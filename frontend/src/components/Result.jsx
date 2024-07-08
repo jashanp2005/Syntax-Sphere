@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearState } from '../redux/rootSlice';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Result = () => {
   const [correctAns, setCorrectAns] = useState(0);
@@ -12,6 +13,8 @@ const Result = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { language } = useParams(); // Destructure the language parameter
 
   // Filter questions outside of useEffect
   const questions = words.filter((item) => item.word);
@@ -37,8 +40,14 @@ const Result = () => {
       } else {
         toast.success('You have passed');
       }
-    }, 100);
-  }, [result, words]);
+
+      // Send the language and marks as route parameters
+      axios
+        .post(`/api/book/save/${language}/${newPercentage}`)
+        .then(() => console.log('result updated'))
+        .catch((e) => console.log(e + 'Error in catch'));
+    }, 5000);
+  }, [result, words, language]);
 
   const resetHandler = () => {
     navigate('/');

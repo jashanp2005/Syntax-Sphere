@@ -26,17 +26,31 @@ export const getLastFiveScores = async (req, res) => {
     }
 }
 
-export const saveResult = async (req, res) => {
+export const saveResult = async (req, res, next) => {
     try {
-        const email = req.user.email;
-        const user = User.find({email});
-        const arr = user.scores;
-        const language = req.query.language;
-        const marks = req.query.marks;
-        arr = [...arr, {language: language, score: marks}]
-        return res.status(200).json('saved successfully');
-    } 
-    catch (error) {
-        return next(errorHandler(500, 'failed'));
+      const user = req.user;
+      const { language, marks } = req.params;
+      const email = user.email;
+  
+      // Find the user by email
+      const existingUser = await User.findOne({ email });
+  
+      if (existingUser) {
+        // Update the user's scores
+        const newScore = { language, score: marks };
+        existingUser.scores.push(newScore);
+  
+        // Save the updated user document
+        await existingUser.save();
+  
+        res.status(200).json('Saved successfully');
+      } else {
+        console.log('error in saving 1')
+        res.status(400).json({ message: 'User does not exist' });
+      }
+    } catch (error) {
+      console.log(error);
+      console.log('error in saving 2')
+      return res.status(500).json({message: 'Some error occured'})
     }
-}
+  };

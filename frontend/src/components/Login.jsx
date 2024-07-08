@@ -26,7 +26,7 @@ const Login = () => {
         }).catch((error) => {
             if(error.response){
                 console.log(error);
-                toast.error("Error: " + err.response.data.message);
+                toast.error("Error: " + error.response.data.message);
                 setTimeout(() => {}, 2000);
             }
         });

@@ -51,8 +51,8 @@ function RadioGroup() {
       console.log(result);
       dispatch(saveResult(result));
       timeoutId = setTimeout(() => {
-        navigate('/result');
-      }, 2000); // Wait for 2 seconds before navigating
+        navigate(`/result/${language}`);
+      }, 5000); // Wait for 2 seconds before navigating
     }
     return () => clearTimeout(timeoutId); // Cleanup the timeout on component unmount or update
   }, [count, result, words, dispatch, navigate]);
