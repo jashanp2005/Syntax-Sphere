@@ -42,15 +42,19 @@ const Result = () => {
       }
 
       // Send the language and marks as route parameters
-      axios
-        .post(`/api/book/save/${language}/${newPercentage}`)
-        .then(() => console.log('result updated'))
-        .catch((e) => console.log(e + 'Error in catch'));
+      
     }, 5000);
   }, [result, words, language]);
 
   const resetHandler = () => {
-    navigate('/');
+    // navigate('/');
+    axios.post(
+      `/api/book/save/${language}/${percentage}`, 
+      { email: 'jashan@gmail.com' }, 
+      { withCredentials: true }
+    )
+    .then(() => console.log('result updated'))
+    .catch((e) => console.log('Error in catch:', e));
     dispatch(clearState());
   };
 

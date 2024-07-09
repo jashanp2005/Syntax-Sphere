@@ -26,18 +26,19 @@ export const getLastFiveScores = async (req, res) => {
     }
 }
 
-export const saveResult = async (req, res, next) => {
+export const saveResult = async (req, res) => {
     try {
       const user = req.user;
       const { language, marks } = req.params;
-      const email = user.email;
+      const {email} = req.body;
+      console.log(email)
   
       // Find the user by email
       const existingUser = await User.findOne({ email });
   
       if (existingUser) {
         // Update the user's scores
-        const newScore = { language, score: marks };
+        const newScore = { language, score: Number(marks) };
         existingUser.scores.push(newScore);
   
         // Save the updated user document
