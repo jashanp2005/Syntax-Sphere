@@ -1,6 +1,5 @@
 import Book from "../model/book.model.js";
 import User from "../model/user.model.js";
-import {errorHandler} from '../utils/error.js'
 
 export const getBook = async (req, res) => {
     try {
@@ -29,19 +28,15 @@ export const getLastFiveScores = async (req, res) => {
 export const saveResult = async (req, res) => {
     try {
       const user = req.user;
+      console.log(user);
       const { language, marks } = req.params;
-      const {email} = req.body;
-      console.log(email)
   
-      // Find the user by email
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ email:user.email });
   
       if (existingUser) {
-        // Update the user's scores
         const newScore = { language, score: Number(marks) };
         existingUser.scores.push(newScore);
   
-        // Save the updated user document
         await existingUser.save();
   
         res.status(200).json('Saved successfully');

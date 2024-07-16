@@ -1,19 +1,19 @@
 import jwt from 'jsonwebtoken';
 import { errorHandler } from './error.js';
+import User from '../model/user.model.js';
 
-export const verifyToken = (req, res, next) => {
-    const token = req.cookies.access_token;
-    if(!token){
-        console.log('Didnot recieve the token') // debug
-        return next(errorHandler(401, 'Unauthorized'));
-    }
-    jwt.verify(token, 'jashan', (err, user) => {
-        if(err){
-            console.log(err.message);
-            console.log('error in jwt verify')
+export const verifyToken = async(req, res, next) => {
+    try {
+        const token = req.cookies.access_token;
+        if(!token){
+            console.log('Didnot recieve the token') // debug
             return next(errorHandler(401, 'Unauthorized'));
         }
+        const decodedData=jwt.verify(token, 'jashan' );
+        const user=await User.findById(decodedData.id);
         req.user = user;
         next();
-    });
+    } catch (error) {
+        return next(new errorHandler(401,"Unauthorized"))
+    }
 };

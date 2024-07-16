@@ -11,15 +11,15 @@ const rootSlice = createSlice({
     initialState,
     reducers: {
         getWordsRequest: (state) => {
-            state.loading = true; // on request loading is true
+            state.loading = true; 
         },
         getWordsSuccess: (state, action) => { 
             state.loading = false;
-            state.words = action.payload;       // succesfully got the words
+            state.words = action.payload;     
         },
         getWordsFail: (state, action) => {
             state.loading = false;
-            state.error = action.payload;     // failed to get the words
+            state.error = action.payload;  
         },
         saveResult: (state, action) => {
             state.loading = false;
@@ -29,7 +29,7 @@ const rootSlice = createSlice({
             state.loading = false;
             state.result = [];
             state.words = [];
-            state.error = undefined;   // clear everything
+            state.error = undefined;  
         },
     }
 })

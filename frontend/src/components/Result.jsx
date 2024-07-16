@@ -14,9 +14,8 @@ const Result = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { language } = useParams(); // Destructure the language parameter
+  const { language } = useParams();
 
-  // Filter questions outside of useEffect
   const questions = words.filter((item) => item.word);
 
   useEffect(() => {
@@ -33,24 +32,19 @@ const Result = () => {
     const newPercentage = (correctAnswers / words.length) * 100;
     setPercentage(newPercentage);
 
-    // Delay the toast messages to ensure the state is updated
     setTimeout(() => {
       if (newPercentage < 50) {
         toast.error('OOPS, You are fail');
       } else {
         toast.success('You have passed');
       }
-
-      // Send the language and marks as route parameters
       
     }, 5000);
   }, [result, words, language]);
 
   const resetHandler = () => {
-    // navigate('/');
     axios.post(
       `/api/book/save/${language}/${percentage}`, 
-      { email: 'jashan@gmail.com' }, 
       { withCredentials: true }
     )
     .then(() => console.log('result updated'))
