@@ -13,9 +13,10 @@ export const getBook = async (req, res) => {
 
 export const getLastFiveScores = async (req, res) => {
     try{
-        const email = req.user.email;
-        const user = User.find({email});
-        if(!user){
+        const user = req.user;
+        console.log(user);
+        const existingUser = await User.findOne({email: user.email});
+        if(!existingUser){
             return res.status(500).json('Not a valid user');
         }
         return res.status(200).json(user.scores);

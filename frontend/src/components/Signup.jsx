@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Login from './Login';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -25,7 +24,7 @@ const Signup = () => {
         await axios.post('/api/user/signup', userInfo).then((res) => {
             console.log(res.data);
             if (res.data) {
-                toast.success('Sign up successfull');
+                toast.success('Sign up successful');
                 navigate(from, { replace: true });
             }
             localStorage.setItem("Users", JSON.stringify(res.data.user));
@@ -90,7 +89,7 @@ const Signup = () => {
                                 <span>Password</span>
                                 <br />
                                 <input
-                                    type="text"
+                                    type="password"
                                     placeholder="Enter your password"
                                     className="w-80 px-3 py-1 border rounded-md outline-none"
                                     {...register("password", { required: true })}
@@ -111,13 +110,10 @@ const Signup = () => {
                                     Have account?{" "}
                                     <button
                                         className="underline text-blue-500 cursor-pointer"
-                                        onClick={() =>
-                                            document.getElementById("my_modal_3").showModal()
-                                        }
+                                        onClick={() => navigate('/')}
                                     >
                                         Login
                                     </button>{" "}
-                                    <Login />
                                 </p>
                             </div>
                         </form>
@@ -128,4 +124,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Signup;

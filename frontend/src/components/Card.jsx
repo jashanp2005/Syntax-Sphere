@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom';
 
 const Card = ({item}) => {
-  const path = `/quiz/${item.category}`
+  const path = `/learning/${item.category}`
   return (
     <>
       <div className="mt-4 my-3 p-3">

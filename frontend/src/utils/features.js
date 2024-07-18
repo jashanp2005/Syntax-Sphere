@@ -100,3 +100,11 @@ export const fetchAudio = async (text, language) => {
   const data = response.data;
   return data;
 };
+
+
+export const hashMap = {
+  'es': 'Spanish',
+  'hi': 'hindi',
+  'ja': 'japaneese',
+  'fr': 'french'
+}

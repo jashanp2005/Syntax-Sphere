@@ -11,6 +11,7 @@ export const verifyToken = async(req, res, next) => {
         }
         const decodedData=jwt.verify(token, 'jashan' );
         const user=await User.findById(decodedData.id);
+        // console.log(user)
         req.user = user;
         next();
     } catch (error) {

@@ -42,6 +42,8 @@ const Result = () => {
     }, 5000);
   }, [result, words, language]);
 
+
+  {/* With credentials is used to tell ki request me cookies vagera bhi include karo*/}
   const resetHandler = () => {
     axios.post(
       `/api/book/save/${language}/${percentage}`, 

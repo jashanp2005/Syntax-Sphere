@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchAudio, translateWords } from "../utils/features";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,7 +15,7 @@ const Learning = () => {
   const [audioSrc, setAudioSrc] = useState("");
   const audioRef = useRef(null);
 
-  const params = useSearchParams()[0].get("language");
+  const {language} = useParams();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const Learning = () => {
     if (player) {
       player.play();
     } else {
-      const data = await fetchAudio(words[count]?.word, params);
+      const data = await fetchAudio(words[count]?.word, language);
       setAudioSrc(data);
     }
   };
@@ -42,7 +42,7 @@ const Learning = () => {
 
   useEffect(() => {
     dispatch(getWordsRequest());
-    translateWords(params || "hi")
+    translateWords(language || "hi")
       .then((arr) => dispatch(getWordsSuccess(arr)))
       .catch((err) => dispatch(getWordsFail(err)));
 
@@ -50,7 +50,7 @@ const Learning = () => {
       alert(error);
       dispatch(clearState());
     }
-  }, [dispatch, params, error]);
+  }, [dispatch, language, error]);
 
   if (loading) return <Loader />;
 
@@ -112,7 +112,7 @@ const Learning = () => {
 
         <button
           className="w-full py-2 px-4 bg-blue-500 text-white rounded-md"
-          onClick={count === words.length - 1 ? () => navigate("/quiz") : nextHandler}
+          onClick={count === words.length - 1 ? () => navigate(`/quiz/${language}`) : nextHandler}
         >
           {count === words.length - 1 ? "Quiz" : "Next"}
         </button>

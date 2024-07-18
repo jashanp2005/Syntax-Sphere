@@ -8,6 +8,8 @@ import { useAuth } from './context/AuthProvider';
 import Quiz from './components/Quiz';
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Learning from './components/Learning';
+import Display from './components/Display';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
 
@@ -18,14 +20,16 @@ const App = () => {
     <div className="dark:bg-slate-900 dark:text-white">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/course"
-          element={authUser ? <Courses /> : <Navigate to="/signup" />}
-        />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path='/course' element={<Courses/>}/>
+          <Route path="/quiz/:language" element={<Quiz />} />
+          <Route path='/result/:language' element={<Result />} />
+          <Route path='/learning/:language' element={<Learning />}></Route>
+          <Route path='/scores' element={<Display />} />
+        </Route>
+
         <Route path="/signup" element={<Signup />} />
-        <Route path="/quiz/:language" element={<Quiz />}/>
-        <Route path='/result/:language' element={<Result/>}/>
-        <Route path='/learning' element={<Learning/>}></Route>
       </Routes>
       <Toaster />
     </div>
